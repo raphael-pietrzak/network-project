@@ -6,7 +6,46 @@ from ping import FPSCounter
 from settings import *
 
 
+
 class UDPServer(threading.Thread):
+    def __init__(self, new_clients, clients):
+        super().__init__()
+        self.received_data = {}
+        self.data_to_send = {}
+        self.new_clients = new_clients
+        self.clients = clients
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.server_socket.bind((HOST, UDP_PORT))
+
+    def run(self):
+        print("Serveur UDP en écoute...")
+        while True:
+            data, addr = self.server_socket.recvfrom(1024)
+            self.received_data = json.loads(data.decode('utf-8')) 
+            # print(f"Reçu du client ({addr}): {self.received_data}")
+
+            # No Data
+            if not self.received_data:
+                continue
+
+            # Traiter le message du client ici
+            #######################################
+            client = self.clients.get(addr)
+            if not client:
+                client = Client()
+                self.clients[addr] = client
+
+            client.update_player(self.received_data)
+            #######################################
+
+
+            self.server_socket.sendto(json.dumps(self.data_to_send).encode('utf-8'), addr)
+
+
+
+
+
+class TUDPServer(threading.Thread):
     def __init__(self, new_clients, clients):
         super().__init__()
         self.new_clients = new_clients

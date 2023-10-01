@@ -8,7 +8,28 @@ from ping import FPSCounter
 from settings import *
 
 
+
 class UDPClient(threading.Thread):
+    def __init__(self, ):
+
+        super().__init__()
+        self.data_received = {}
+        self.data_to_send = {}
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.client_socket.settimeout(3.0)
+
+
+
+    def run(self):
+        while True:
+            self.client_socket.sendto(json.dumps(self.data_to_send).encode('utf-8'), (SERVER_IP, UDP_PORT))
+            response, addr = self.client_socket.recvfrom(1024)
+            self.data_received = json.loads(response.decode('utf-8'))
+
+            # print(f"Reçu du serveur ({addr}): {self.data_received}")
+
+
+class TUDPClient(threading.Thread):
     def __init__(self):
         super().__init__()
         self.data_to_send = {}
