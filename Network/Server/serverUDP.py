@@ -1,6 +1,7 @@
 import json
 import socket
 import threading
+import time
 from Network.Server.client import Client
 from ping import FPSCounter
 from settings import *
@@ -22,6 +23,8 @@ class UDPServer(threading.Thread):
         while True:
             data, addr = self.server_socket.recvfrom(1024)
             self.received_data = json.loads(data.decode('utf-8')) 
+
+            # #DEBUG
             # print(f"Reçu du client ({addr}): {self.received_data}")
 
             # No Data
@@ -40,6 +43,10 @@ class UDPServer(threading.Thread):
 
 
             self.server_socket.sendto(json.dumps(self.data_to_send).encode('utf-8'), addr)
+
+            # #DEBUG
+            # print(f"Envoyé au client ({addr}): {self.data_to_send}")
+
 
 
 
