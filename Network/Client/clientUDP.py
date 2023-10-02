@@ -11,10 +11,14 @@ from settings import *
 
 class UDPClient(threading.Thread):
     def __init__(self, ):
-
         super().__init__()
-        self.data_received = {}
-        self.data_to_send = {}
+
+        self.is_running = True
+
+        self.server_data = {}
+        self.client_data = {}
+
+
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.client_socket.settimeout(1.0)
 
@@ -22,42 +26,42 @@ class UDPClient(threading.Thread):
         self.receive_thread.start()
 
 
-        self.network_fps_counter = FPSCounter('NETWORK')
+        self.network_fps_counter = FPSCounter('CLIENT UDP')
 
 
 
     def run(self):
-        while True:
+        while self.is_running:
             try:
+                self.client_socket.sendto(json.dumps(self.client_data).encode(ENCODING), (SERVER_IP, UDP_PORT))
+                time.sleep(0.001)
+
                 self.network_fps_counter.ping()
 
-
-                
-                # SEND
-
-                self.client_socket.sendto(json.dumps(self.data_to_send).encode('utf-8'), (SERVER_IP, UDP_PORT))
-
-                # #DEBUG
-                # print(f"Sent to server: {self.data_to_send}")
-
-
-                # RECEIVE
-
-                # response, addr = self.client_socket.recvfrom(1024)
-                # self.data_received = json.loads(response.decode('utf-8'))
-
-                # #DEBUG
-                # print(f"Received from server: {self.data_received}")
-
-
             except TimeoutError:
-                print('Timeout')
-                pass
+                print('Timeout UDP client send')
+
+            except OSError:
+                print('Connexion lost UDP client')
+
 
     def receive(self):
-        while True:
+        while self.is_running:
             try:
-                response, addr = self.client_socket.recvfrom(1024)
-                self.data_received = json.loads(response.decode('utf-8'))
-            except:
-                pass
+                response, addr = self.client_socket.recvfrom(BUFFER_SIZE)
+                self.server_data = json.loads(response.decode(ENCODING))
+                time.sleep(0.001)
+
+            except TimeoutError:
+                print('Timeout UDP client receive')
+                self.close()
+
+            except Exception as e:
+                print(f'Error UDP client receive: {e}')
+    
+    
+    def close(self):
+        self.is_running = False
+        if self.client_socket:
+            self.client_socket.close()
+

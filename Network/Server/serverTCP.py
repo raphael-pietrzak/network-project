@@ -10,12 +10,15 @@ class TCPServer(threading.Thread):
     def __init__(self):
         super().__init__()
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        
         while True:
             try:
                 self.server_socket.bind((HOST, TCP_PORT))
                 break
             except OSError:
                 time.sleep(1)
+                
+        print(f"Serveur TCP en écoute sur {HOST}:{TCP_PORT} ...")
 
         self.server_socket.listen(5)  # Permet jusqu'à 5 connexions simultanées
         self.client_connections = []  # Liste pour stocker les connexions des clients
@@ -24,7 +27,6 @@ class TCPServer(threading.Thread):
 
 
     def run(self):
-        print(f"Serveur TCP en écoute sur {HOST}:{TCP_PORT} ...")
         while True:
             client_socket, adress = self.server_socket.accept()
             print("Nouvelle connexion établie :", adress)
@@ -59,7 +61,7 @@ class TCPServer(threading.Thread):
             return None
 
 
-    def send_to_all_clients(self, message):
+    def send(self, message):
         for client_socket in self.client_connections:
             try:
                 message

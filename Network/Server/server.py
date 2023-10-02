@@ -5,11 +5,7 @@ from Network.Server.serverUDP import UDPServer
 class Server:
     def __init__(self):
 
-        self.new_clients = []
-        self.clients = {}
-
-
-        self.udp_server = UDPServer(self.new_clients, self.clients)
+        self.udp_server = UDPServer()
         self.udp_server.start()
 
         self.tcp_server = TCPServer()
@@ -18,16 +14,19 @@ class Server:
         
     
     def send(self, message, protocol):
-        if protocol == 'UDP':
-            self.udp_server.data_to_send = message
-        elif protocol == 'TCP':
-            self.tcp_server.send_to_all_clients(message)
-    
+        match protocol:
+            case 'TCP': self.tcp_server.send(message)
+            case 'UDP': self.udp_server.server_data = message
+            case _: return None
+                
 
     def receive(self, protocol):
-        if protocol == 'UDP':
-            return self.udp_server.clients
-        elif protocol == 'TCP':
-            return self.tcp_server.data_received
-        else:
-            return None
+        match protocol:
+            case 'TCP': return self.tcp_server.data_received
+            case 'UDP': return self.udp_server.clients
+            case _: return None
+    
+
+    def close(self):
+        self.udp_server.close()
+        self.tcp_server.close()
