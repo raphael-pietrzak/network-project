@@ -1,12 +1,11 @@
 
 import time
-import uuid
 from player import Player
 
 
 class Client:
-    def __init__(self):
-        self.id = str(uuid.uuid4()).split('-')[0]
+    def __init__(self, uuid):
+        self.uuid = uuid
         self.player = Player()
         self.last_udp_timestamp = time.time()
     

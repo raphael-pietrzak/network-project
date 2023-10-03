@@ -1,14 +1,18 @@
 import uuid
-from Network.Client.clientTCP import TCPClient
-from Network.Client.clientUDP import UDPClient
+from Client.clientTCP import TCPClient
+from Client.clientUDP import UDPClient
 
 
 class Client:
     def __init__(self):
+        self.udp_client = None
+        self.tcp_client = None
         self.uuid = str(uuid.uuid4()).split('-')[0]
         self.start()
     
     def start(self):
+        if self.udp_client:
+            self.udp_client.close()
         self.udp_client = UDPClient()
         self.tcp_client = TCPClient()
         self.tcp_client.start()

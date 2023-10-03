@@ -2,7 +2,7 @@ import json
 import socket
 import threading
 import time
-from Network.Server.client import Client
+from Server.client import Client
 
 from settings import *
 
@@ -102,7 +102,7 @@ class ClientHandler(threading.Thread):
 
         if not client:
             print("Création TCP client")
-            client = Client()
+            client = Client(self.uuid)
             self.server.clients[self.uuid] = client
         
         if self.client_data:

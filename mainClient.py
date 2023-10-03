@@ -1,5 +1,5 @@
 import json, socket, sys, threading, time, pygame
-from Network.Client.client import Client
+from Client.client import Client
 from ping import FPSCounter
 from settings import *
         

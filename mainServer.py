@@ -2,7 +2,7 @@ from settings import *
 
 import sys, pygame
 
-from Network.Server.server import Server
+from Server.server import Server
 from ping import FPSCounter
 
 
@@ -54,7 +54,7 @@ class Main:
         message = {}
         for adress, client in clients.items():
             self.players.append(client.player)
-            message[client.id] = {'pos' : client.player.get_position(), 'color' : client.player.color}
+            message[client.uuid] = {'pos' : client.player.get_position(), 'color' : client.player.color}
         
         self.server.send(message, 'UDP')
 
