@@ -5,10 +5,12 @@ from Network.Server.serverUDP import UDPServer
 class Server:
     def __init__(self):
 
-        self.udp_server = UDPServer()
+        self.clients = {}
+
+        self.udp_server = UDPServer(self.clients)
         self.udp_server.start()
 
-        self.tcp_server = TCPServer()
+        self.tcp_server = TCPServer(self.clients)
         self.tcp_server.start()
 
         

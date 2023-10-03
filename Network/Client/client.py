@@ -13,12 +13,18 @@ class Client:
         self.tcp_client = TCPClient()
         self.tcp_client.start()
         self.udp_client.start()
+        self.send('Hello', 'TCP')
 
 
     def send(self, message, protocol):
+        if protocol == 'TCP' and not self.tcp_client.is_running:
+            print('TCP client not running')
+            return
+
+        
         match protocol:
-            case 'TCP': self.tcp_client.send(message)
-            case 'UDP': self.udp_client.client_data = message
+            case 'TCP': self.tcp_client.send({self.uuid: message})
+            case 'UDP': self.udp_client.client_data = {self.uuid: message}
             case _: return None
     
     
@@ -32,7 +38,10 @@ class Client:
     def is_online(self):
         return self.tcp_client.is_running and self.udp_client.is_running
 
-    
+    def menu_return(self):
+        print('Back to menu')
+
+
     def close(self):
         self.udp_client.close()
         self.tcp_client.close()

@@ -33,17 +33,11 @@ class Main:
                 pygame.quit()
                 sys.exit()
         
-        return_key = self.test_tcp()
-        if return_key:
-            self.server.send("Server Pressed Return", 'TCP')
-        
-    def test_tcp(self):
-        keys = pygame.key.get_pressed()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    print('[ EVENT ] : Return pressed')
+                    self.server.send('Server Pressed Return', 'TCP')
 
-        if keys[pygame.K_RETURN]:
-            return True
-        
-        return False
             
     def draw(self):
 

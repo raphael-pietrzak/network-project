@@ -14,7 +14,6 @@ class Main:
         self.client = Client()
         self.players = {}
 
-        self.client.send("quit", 'TCP')
         
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption('CLIENT')
@@ -31,6 +30,7 @@ class Main:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     print('[ EVENT ] : Return pressed')
+                    self.client.send('Client Pressed Return', 'TCP')
                     if not self.client.is_online():
                         self.client.start()
                         

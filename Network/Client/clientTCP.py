@@ -34,6 +34,7 @@ class TCPClient:
                     data = self.client_socket.recv(BUFFER_SIZE)
                     if not data:
                         break
+                    print('Reçu du server :', data.decode(ENCODING))
                     self.server_data = json.loads(data.decode(ENCODING))
 
                     self.network_fps_counter.ping()

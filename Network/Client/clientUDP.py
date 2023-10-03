@@ -54,7 +54,7 @@ class UDPClient(threading.Thread):
                 time.sleep(0.001)
 
             except TimeoutError:
-                print('Timeout UDP client receive')
+                print('Back to the menu')
                 self.close()
 
             except Exception as e:
