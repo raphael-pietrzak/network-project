@@ -43,6 +43,7 @@ class UDPClient(threading.Thread):
 
             except OSError:
                 print('Connexion lost UDP client')
+        print('Thread UDP client send terminated')
 
 
     def receive(self):
@@ -58,10 +59,13 @@ class UDPClient(threading.Thread):
 
             except Exception as e:
                 print(f'Error UDP client receive: {e}')
+        
+        print('Thread UDP client receive terminated')
     
-    
+
     def close(self):
         self.is_running = False
+        self.server_data = {}
         if self.client_socket:
             self.client_socket.close()
 

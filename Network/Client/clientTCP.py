@@ -1,9 +1,6 @@
 
-import json
-import socket
-import threading
+import json, select, socket, threading
 from ping import FPSCounter
-
 from settings import *
 
 
@@ -27,17 +24,26 @@ class TCPClient:
             print('Connexion refused TCP client')
             self.close()
 
-
     def receive_messages(self):
         while self.is_running:
             try:
-                data = self.client_socket.recv(BUFFER_SIZE)
-                self.server_data = json.loads(data.decode(ENCODING))
+                # Utilisez select pour vérifier si des données sont disponibles à la lecture
+                rlist, _, _ = select.select([self.client_socket], [], [], 1.0)
 
-                self.network_fps_counter.ping() 
+                if rlist:
+                    data = self.client_socket.recv(BUFFER_SIZE)
+                    if not data:
+                        break
+                    self.server_data = json.loads(data.decode(ENCODING))
+
+                    self.network_fps_counter.ping()
+                else:
+                    # print('Pas de données TCP disponibles pour la lecture')
+                    pass
 
             except OSError:
                 print('Reception impossible TCP client')
+        print('Thread TCP client receive terminated')
     
 
     def send(self, message):

@@ -14,8 +14,7 @@ class Main:
         self.client = Client()
         self.players = {}
 
-        # if self.client.online:
-        #     self.client.send("quit", 'TCP')
+        self.client.send("quit", 'TCP')
         
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption('CLIENT')
@@ -28,6 +27,13 @@ class Main:
                 self.client.close()
                 pygame.quit()
                 sys.exit()
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    print('[ EVENT ] : Return pressed')
+                    if not self.client.is_online():
+                        self.client.start()
+                        
 
 
     def get_keyboard_inputs(self):
@@ -57,13 +63,14 @@ class Main:
 
     def update_players(self):
         players = self.client.receive('UDP')
-
-        for adress, player in players.items():
-            if adress in self.players:
-                self.players[adress]['pos'] = player['pos']
-                self.players[adress]['color'] = player['color']
-            else:
-                self.players[adress] = player
+        self.players = players
+        
+        # for adress, player in players.items():
+        #     if adress in self.players:
+        #         self.players[adress]['pos'] = player['pos']
+        #         self.players[adress]['color'] = player['color']
+        #     else:
+        #         self.players[adress] = player
 
 
     def run(self):

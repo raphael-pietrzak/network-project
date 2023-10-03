@@ -1,15 +1,18 @@
+import uuid
 from Network.Client.clientTCP import TCPClient
 from Network.Client.clientUDP import UDPClient
 
 
 class Client:
     def __init__(self):
-
+        self.uuid = str(uuid.uuid4()).split('-')[0]
+        self.start()
+    
+    def start(self):
         self.udp_client = UDPClient()
-        self.udp_client.start()
-
         self.tcp_client = TCPClient()
         self.tcp_client.start()
+        self.udp_client.start()
 
 
     def send(self, message, protocol):
