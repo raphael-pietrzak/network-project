@@ -15,7 +15,7 @@ class TCPClient:
     def start(self):
         try:
             self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.client_socket.connect((HOST, TCP_PORT))
+            self.client_socket.connect((SERVER_IP, TCP_PORT))
             self.client_socket.settimeout(1.0)
 
             self.receive_thread = threading.Thread(target=self.receive_messages, daemon=True)
