@@ -38,7 +38,6 @@ class UDPServer(threading.Thread):
 
             except Exception as e:
                 print(f'Error UDP server send/receive : {e}')
-                print(data.decode(ENCODING))
                 continue
     
 

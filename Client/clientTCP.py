@@ -20,14 +20,16 @@ class TCPClient:
 
             self.receive_thread = threading.Thread(target=self.receive_messages, daemon=True)
             self.receive_thread.start()
+
         except ConnectionRefusedError:
             print('Connexion refused TCP client')
             self.close()
 
+
     def receive_messages(self):
         while self.is_running:
             try:
-                # Utilisez select pour vérifier si des données sont disponibles à la lecture
+                # Select pour vérifier si des données sont disponibles à la lecture
                 rlist, _, _ = select.select([self.client_socket], [], [], 1.0)
 
                 if rlist:
@@ -38,12 +40,11 @@ class TCPClient:
                     self.server_data = json.loads(data.decode(ENCODING))
 
                     self.network_fps_counter.ping()
-                else:
-                    # print('Pas de données TCP disponibles pour la lecture')
-                    pass
+
 
             except OSError:
-                print('Reception impossible TCP client')
+                break
+
         print('Thread TCP client receive terminated')
     
 
