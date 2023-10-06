@@ -56,21 +56,11 @@ class Main:
 
 
     def draw(self):
-        self.update_players()
+        self.players = self.client.receive('UDP')
         for pid, player in self.players.items():
             pygame.draw.rect(self.display_surface, player['color'], (player['pos'][0], player['pos'][1], 40, 40))
 
 
-    def update_players(self):
-        players = self.client.receive('UDP')
-        self.players = players
-        
-        # for adress, player in players.items():
-        #     if adress in self.players:
-        #         self.players[adress]['pos'] = player['pos']
-        #         self.players[adress]['color'] = player['color']
-        #     else:
-        #         self.players[adress] = player
 
 
     def run(self):

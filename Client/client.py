@@ -27,8 +27,8 @@ class Client:
 
         
         match protocol:
-            case 'TCP': self.tcp_client.send({self.uuid: message})
-            case 'UDP': self.udp_client.client_data = {self.uuid: message}
+            case 'TCP': self.tcp_client.send({'uuid': self.uuid, 'message': message})
+            case 'UDP': self.udp_client.client_data = {'uuid': self.uuid, 'message': message}
             case _: return None
     
     

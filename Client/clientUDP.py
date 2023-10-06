@@ -36,7 +36,6 @@ class UDPClient(threading.Thread):
                 self.client_socket.sendto(json.dumps(self.client_data).encode(ENCODING), (SERVER_IP, UDP_PORT))
                 time.sleep(0.001)
 
-                self.network_fps_counter.ping()
 
             except TimeoutError:
                 print('Timeout UDP client send')
@@ -51,6 +50,7 @@ class UDPClient(threading.Thread):
             try:
                 response, addr = self.client_socket.recvfrom(BUFFER_SIZE)
                 self.server_data = json.loads(response.decode(ENCODING))
+                self.network_fps_counter.ping()
                 time.sleep(0.001)
 
             except TimeoutError:

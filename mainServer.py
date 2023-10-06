@@ -1,3 +1,4 @@
+from player import Player
 from settings import *
 
 import sys, pygame
@@ -11,16 +12,15 @@ from ping import FPSCounter
 
 class Main:
     def __init__(self):
-        
-        # server
-        self.server = Server()
-
-        # display
-        pygame.init()
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption('SERVER')
 
-        self.players = []
+        # server
+        self.server = Server()
+        self.players = {}
+
+        # groups
+        self.player_sprites = pygame.sprite.Group()
 
         # ping
         self.fps_counter = FPSCounter('MAIN')
@@ -39,24 +39,27 @@ class Main:
                     self.server.send('Server Pressed Return', 'TCP')
 
             
-    def draw(self):
-
-        self.update_players()
-        for player in self.players:
-            player.move(player.inputs)
-
-            pygame.draw.rect(self.display_surface, player.color, (player.get_position()[0], player.get_position()[1], 40, 40))
-
-
     def update_players(self):
-        clients = self.server.receive('UDP')
-        self.players = []
-        message = {}
-        for adress, client in clients.items():
-            self.players.append(client.player)
-            message[client.uuid] = {'pos' : client.player.get_position(), 'color' : client.player.color}
+        new_players = self.server.get_new_clients()
+        for uuid in new_players:
+            player = Player(self.player_sprites)
+            self.players[uuid] = player
+            
+
+        del_players = self.server.get_del_clients()
+        for uuid in del_players:
+            self.player_sprites.remove(player)
+            del self.players[uuid]
+
+        clients_data = self.server.receive('UDP')
+        for uuid, data in clients_data.items():
+            player = self.players.get(uuid)
+            if not player: break
+            player.inputs = data['inputs']
         
+        message = {uuid: {'color': player.color, 'pos': player.get_position()} for uuid, player in self.players.items()}
         self.server.send(message, 'UDP')
+
 
         
     
@@ -66,7 +69,10 @@ class Main:
 
         # drawing
         self.display_surface.fill('beige')
-        self.draw()
+        self.update_players()
+        for player in self.player_sprites:
+            player.move()
+            player.draw()
 
         # update
         self.fps_counter.ping()
@@ -74,6 +80,7 @@ class Main:
 
 
 if __name__ == "__main__":
+    pygame.init()
     main = Main()
     while True:
         main.run()
