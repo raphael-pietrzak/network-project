@@ -48,13 +48,17 @@ class Main:
 
         del_players = self.server.get_del_clients()
         for uuid in del_players:
+            print(uuid, 'deleted')
+            player = self.players.get(uuid)
+            if not player: break
             self.player_sprites.remove(player)
             del self.players[uuid]
 
         clients_data = self.server.receive('UDP')
+        print(clients_data)
         for uuid, data in clients_data.items():
             player = self.players.get(uuid)
-            if not player: break
+            if not player: continue
             player.inputs = data['inputs']
         
         message = {uuid: {'color': player.color, 'pos': player.get_position()} for uuid, player in self.players.items()}

@@ -3,8 +3,9 @@ from settings import *
 
 
 class TCPServer(threading.Thread):
-    def __init__(self):
+    def __init__(self, del_udp_client):
         super().__init__()
+        self.del_udp_client = del_udp_client
         self.clients = []
         self.new_clients = []
         self.del_clients = []
@@ -79,31 +80,21 @@ class ClientHandler(threading.Thread):
         self.client_data = {}
 
     def run(self):
-            while self.is_running:
-                try:
-                    data = self.client_socket.recv(1024)
-                    if not data: break 
-                    # DEBUG
-                    print(f"Reçu du client {self.adress}: {data.decode(ENCODING)}")
-                    self.client_data = json.loads(data.decode(ENCODING))
+        while self.is_running:
+            try:
+                data = self.client_socket.recv(BUFFER_SIZE)
+                if not data: break 
+                # DEBUG
+                print(f"Reçu du client {self.adress}: {data.decode(ENCODING)}")
+                self.client_data = json.loads(data.decode(ENCODING))
 
 
-                except TimeoutError:
-                    continue
-
-
-    def update_client(self):
-        self.uuid = list(self.client_data.keys())[0]
-        self.client = self.server.clients.get(self.uuid)
-
-        if not self.client:
-            print("Création TCP client")
-            self.new_clients.append(self.uuid)
-            self.server.clients[self.uuid] = self.client
+            except TimeoutError:
+                continue
         
-        if self.client_data:
-            self.client.update_player(self.client_data[self.uuid], 'TCP')
-
+        print('Thread TCP server receive terminated')
+        self.close()
+        
 
     
     def send(self, message):
@@ -112,8 +103,9 @@ class ClientHandler(threading.Thread):
     
     def close(self):
         self.is_running = False
-        self.clients.remove(self)
+        self.server.clients.remove(self)
         self.server.del_clients.append(self.uuid)
-        self.server.client_socket.close()
+        self.server.del_udp_client(self.uuid)
+        self.client_socket.close()
         print(f"Client {self.adress} déconnecté")
 

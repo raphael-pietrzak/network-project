@@ -37,8 +37,11 @@ class UDPServer(threading.Thread):
                 self.network_fps_counter.ping()
 
             except Exception as e:
-                print(f'Error UDP server send/receive : {e}')
+                print(f'########   Error UDP server : {e}   ########')
                 continue
+        
+        print('Thread UDP server terminated')
+
     
 
     def close(self):

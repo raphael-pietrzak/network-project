@@ -7,7 +7,7 @@ class Server:
         self.udp_server = UDPServer()
         self.udp_server.start()
 
-        self.tcp_server = TCPServer()
+        self.tcp_server = TCPServer(self.del_udp_client)
         self.tcp_server.start()
 
         
@@ -34,6 +34,9 @@ class Server:
         del_clients = self.tcp_server.del_clients
         self.tcp_server.del_clients = []
         return del_clients
+    
+    def del_udp_client(self, uuid):
+        del self.udp_server.client_data[uuid]
     
 
     def close(self):

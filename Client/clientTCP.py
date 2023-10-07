@@ -29,22 +29,22 @@ class TCPClient:
     def receive_messages(self):
         while self.is_running:
             try:
-                # Select pour vérifier si des données sont disponibles à la lecture
-                rlist, _, _ = select.select([self.client_socket], [], [], 1.0)
+                
+                data = self.client_socket.recv(BUFFER_SIZE)
+                if not data:
+                    break
+                print('Reçu du server :', data.decode(ENCODING))
+                self.server_data = json.loads(data.decode(ENCODING))
 
-                if rlist:
-                    data = self.client_socket.recv(BUFFER_SIZE)
-                    if not data:
-                        break
-                    print('Reçu du server :', data.decode(ENCODING))
-                    self.server_data = json.loads(data.decode(ENCODING))
+                self.network_fps_counter.ping()
 
-                    self.network_fps_counter.ping()
-
+            except TimeoutError:
+                continue
 
             except OSError:
                 break
 
+        self.close()
         print('Thread TCP client receive terminated')
     
 
@@ -57,3 +57,4 @@ class TCPClient:
         self.is_running = False
         if self.client_socket:
             self.client_socket.close()
+        print('TCP client properly closed')

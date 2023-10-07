@@ -42,6 +42,7 @@ class UDPClient(threading.Thread):
 
             except OSError:
                 print('Connexion lost UDP client')
+                
         print('Thread UDP client send terminated')
 
 
