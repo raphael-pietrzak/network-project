@@ -40,6 +40,7 @@ class Main:
 
             
     def update_players(self):
+        # Utilisation conseillée :
         new_players = self.server.get_new_clients()
         for uuid in new_players:
             player = Player(self.player_sprites)
@@ -55,7 +56,6 @@ class Main:
             del self.players[uuid]
 
         clients_data = self.server.receive('UDP')
-        print(clients_data)
         for uuid, data in clients_data.items():
             player = self.players.get(uuid)
             if not player: continue
