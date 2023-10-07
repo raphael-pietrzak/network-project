@@ -8,7 +8,6 @@ from ping import FPSCounter
 from settings import *
 
 
-
 class UDPClient(threading.Thread):
     def __init__(self, ):
         super().__init__()
@@ -34,7 +33,7 @@ class UDPClient(threading.Thread):
         while self.is_running:
             try:
                 self.client_socket.sendto(json.dumps(self.client_data).encode(ENCODING), (SERVER_IP, UDP_PORT))
-                time.sleep(0.001)
+                time.sleep(DELAY)
 
 
             except TimeoutError:
@@ -52,7 +51,7 @@ class UDPClient(threading.Thread):
                 response, addr = self.client_socket.recvfrom(BUFFER_SIZE)
                 self.server_data = json.loads(response.decode(ENCODING))
                 self.network_fps_counter.ping()
-                time.sleep(0.001)
+                time.sleep(DELAY)
 
             except TimeoutError:
                 print('Back to the menu')

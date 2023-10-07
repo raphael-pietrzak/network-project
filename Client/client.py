@@ -13,6 +13,8 @@ class Client:
     def start(self):
         if self.udp_client:
             self.udp_client.close()
+        if self.tcp_client:
+            self.tcp_client.close()
         self.udp_client = UDPClient()
         self.tcp_client = TCPClient()
         self.tcp_client.start()

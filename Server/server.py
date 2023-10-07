@@ -36,7 +36,8 @@ class Server:
         return del_clients
     
     def del_udp_client(self, uuid):
-        del self.udp_server.client_data[uuid]
+        if uuid in self.udp_server.client_data:
+            del self.udp_server.client_data[uuid]
     
 
     def close(self):

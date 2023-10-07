@@ -49,7 +49,6 @@ class Main:
 
         del_players = self.server.get_del_clients()
         for uuid in del_players:
-            print(uuid, 'deleted')
             player = self.players.get(uuid)
             if not player: break
             self.player_sprites.remove(player)
