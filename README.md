@@ -55,6 +55,11 @@ Video Preview: Check out the video preview of the project :
 
 ![](recording_network_preview.mov)
 
+
+<video width="620" height="310" controls>
+  <source src="recording_network_preview.mov" type="video/mp4">
+</video>
+
 Terminal Monitoring: See a snapshot of terminal monitoring :
 
 ![Alt text](<terminal preview.png>)
