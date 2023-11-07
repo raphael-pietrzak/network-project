@@ -53,7 +53,6 @@ Pygame Integration: The graphical display is built using Pygame, providing a vis
 
 Video Preview: Check out the video preview of the project :
 
-![](recording_network_preview.mov)
 
 
 <video width="620" height="310" controls>
