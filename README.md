@@ -62,7 +62,7 @@ Terminal Monitoring: See a snapshot of terminal monitoring :
 
 
 ### License
-This project is licensed under the MIT License.
+This project is licensed under the GNU GENERAL PUBLIC License.
 
 ### Acknowledgments
 Contact
