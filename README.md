@@ -54,10 +54,7 @@ Pygame Integration: The graphical display is built using Pygame, providing a vis
 Video Preview: Check out the video preview of the project :
 
 
-
-<video width="620" height="310" controls>
-  <source src="recording_network_preview.mov" type="video/mp4">
-</video>
+![Alt text](recording_network_preview.gif)
 
 Terminal Monitoring: See a snapshot of terminal monitoring :
 
