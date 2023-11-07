@@ -12,7 +12,7 @@ from ping import FPSCounter
 
 class Main:
     def __init__(self):
-        self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
         pygame.display.set_caption('SERVER')
 
         # server
@@ -40,7 +40,7 @@ class Main:
 
             
     def update_players(self):
-        # Utilisation conseillée :
+
         new_players = self.server.get_new_clients()
         for uuid in new_players:
             player = Player(self.player_sprites)

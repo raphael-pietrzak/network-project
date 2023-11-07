@@ -21,6 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.color =  (randint(0, 255), randint(0, 255), randint(0, 255))
         self.inputs = []
 
+
     def move(self):
         current_time = time.time()
         time_elapsed = current_time - self.last_update_time
