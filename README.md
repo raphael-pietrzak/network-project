@@ -30,6 +30,8 @@ To run this project, you'll need the following:
     python3 mainServer.py
     ```
 
+Open a new terminal window and run the following command:
+
 3. Run the client script:
 
     ```shell

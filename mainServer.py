@@ -1,3 +1,4 @@
+import time
 from player import Player
 from settings import *
 
@@ -45,6 +46,12 @@ class Main:
         for uuid in new_players:
             player = Player(self.player_sprites)
             self.players[uuid] = player
+            message = "INIT DATA"
+            message2 = "INIT DATA2"
+            message3 = "INIT DATA3"
+            self.server.send(message, 'TCP', uuid)
+            self.server.send(message2, 'TCP', uuid)
+            self.server.send(message3, 'TCP', uuid)
             
 
         del_players = self.server.get_del_clients()
